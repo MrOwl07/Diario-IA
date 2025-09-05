@@ -36,7 +36,7 @@
                 </div>
                 <label for="text">
                     <textarea class="form__text" name="text" id="text" cols="30" rows="10" required placeholder="Escribe una entrada...">{{text}}</textarea>
-                    <button type="submit" class="help_button" formaction="{{ url_for('voices') }}">🎤 Grabar</button>
+                    <button type="submit" formaction="{{ url_for('voice') }}" class="help_button">🎤Grabar</button>
                 </label>
                 <button class="form__button">Crear</button>
             </div>

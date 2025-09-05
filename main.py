@@ -98,19 +98,30 @@ def card(id):
 def create():
     return render_template('create_card.html')
 
-@app.route('/voice', methods=['POST'])
-def voices():
-    # Recuperar lo que ya estaba escrito en el textarea
-    current_text = request.form.get('text', '')
-    
-    try:
-        voice_text = speech.speech_es()
-        # Concatenar el texto escrito + lo nuevo grabado
-        session['voice_text'] = current_text + ' ' + voice_text
-    except:
-        session['voice_text'] = current_text + ' Algo salió mal...'
-    
-    return render_template('create_card.html', text=session['voice_text'])
+# Ruta para eliminar una tarjeta
+@app.route('/delete_card/<int:id>', methods=['POST'])
+def delete_card(id):
+    card = Card.query.get_or_404(id)
+    db.session.delete(card)
+    db.session.commit()
+    return redirect('/index')
+
+# Ruta para mostrar el formulario de edición de una tarjeta
+@app.route('/edit_card/<int:id>', methods=['GET', 'POST'])
+def edit_card(id):
+    card = Card.query.get_or_404(id)
+    if request.method == 'POST':
+        card.title = request.form['title']
+        card.subtitle = request.form['subtitle']
+        card.text = request.form['text']
+        db.session.commit()
+        return redirect(f'/card/{id}')
+    return render_template('create_card.html', 
+                           title=card.title,
+                           subtitle=card.subtitle, 
+                           text=card.text, 
+                           edit=True, 
+                           card_id=card.id)
 
 # El formulario de inscripción
 @app.route('/form_create', methods=['GET','POST'])
@@ -129,7 +140,19 @@ def form_create():
     else:
         return render_template('create_card.html')
 
-
+@app.route('/voice', methods=['POST'])
+def voice():
+    # Recuperar los valores actuales del formulario
+    previous_text = request.form.get('text', '')
+    title = request.form.get('title', '')
+    subtitle = request.form.get('subtitle', '')
+    try:
+        new_text = speech.speech_es()
+        text = (previous_text + ' ' + new_text).strip() if previous_text else new_text
+    except Exception as e:
+        text = previous_text + f" Error: {e}"
+    # Mantener los valores en el formulario
+    return render_template('create_card.html', text=text, title=title, subtitle=subtitle)
 
 
 

@@ -1,6 +1,7 @@
 
 import speech_recognition as speech_recog
 #### V1 - función
+
 def speech_es():
     mic = speech_recog.Microphone()
     recog = speech_recog.Recognizer()
@@ -8,7 +9,25 @@ def speech_es():
     with mic as audio_file:
         recog.adjust_for_ambient_noise(audio_file)
         audio = recog.listen(audio_file)
-        return recog.recognize_google(audio, language="es-MX")
+        return recog.recognize_google(audio, language="es-ES")
+    
+def speech_en():
+    mic = speech_recog.Microphone()
+    recog = speech_recog.Recognizer()
+
+    with mic as audio_file:
+        recog.adjust_for_ambient_noise(audio_file)
+        audio = recog.listen(audio_file)
+        return recog.recognize_google(audio, language="en-US")
+    
+def speech_fr():
+    mic = speech_recog.Microphone()
+    recog = speech_recog.Recognizer()
+
+    with mic as audio_file:
+        recog.adjust_for_ambient_noise(audio_file)
+        audio = recog.listen(audio_file)
+        return recog.recognize_google(audio, language="fr-FR")
 
 def prueba():
     #### V2 - script
@@ -23,5 +42,3 @@ def prueba():
 
         print("Conversión de voz a texto...")
         print(f"Usted dijo: {recog.recognize_google(audio, language='es-MX')}")
-        
-prueba()

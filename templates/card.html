@@ -29,6 +29,14 @@
       {{card.text}}
       </div>
       <a class="main__link" href="/index">Volver a las entradas</a>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <!-- Enlace para editar la tarjeta -->
+        <a class="main__link edit-btn" href="{{ url_for('edit_card', id=card.id) }}">Editar</a>
+        <!-- Botón para eliminar la tarjeta -->
+        <form action="{{ url_for('delete_card', id=card.id) }}" method="post" style="display:inline;">
+          <button type="submit" class="main__link delete-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarjeta?');">Eliminar</button>
+        </form>
+      </div>
     </div>
   </main>
   {% endblock %}
